@@ -1,0 +1,27 @@
+---
+title: Overview
+description: What the AMeta-Repo kernel includes today and what it deliberately defers.
+---
+
+## Included
+
+- A pnpm workspace orchestrated by Turborepo 2.x
+- Shared configuration packages for TypeScript and ESLint
+- Shared tooling packages for Vitest, Prettier, and Commitlint
+- `@repo/schema` as the first runtime-safe shared package
+- `apps/api` with Hono, the Node adapter, and a thin tRPC v11 layer
+- Secretless GitHub Actions CI and Dependabot
+- Local quality gates through Husky and Commitlint
+
+## Deferred
+
+- UI framework and design system
+- Authentication package and provider choices
+- Database package and primary database vendor
+- Observability package and backend
+- Cloud provider and deployment target
+- Infrastructure modules and environment wiring
+
+## Why This Exists
+
+The kernel gives consuming projects a stable monorepo foundation without forcing a product stack too early. Shared configuration lives in workspace packages, app layers stay thin, and runtime-specific decisions remain deferred until a real product needs them.

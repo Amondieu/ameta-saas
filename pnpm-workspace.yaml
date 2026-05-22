@@ -1,0 +1,42 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tests/*"
+  - "tooling/*"
+
+catalog:
+  "@astrojs/check": ^0.9.9
+  "@astrojs/starlight": ^0.39.2
+  "@eslint/js": ^10.0.1
+  "@hono/node-server": ^2.0.3
+  "@hono/trpc-server": ^0.4.2
+  "@opentelemetry/exporter-trace-otlp-http": ^0.218.0
+  "@opentelemetry/resources": ^2.7.1
+  "@opentelemetry/sdk-node": ^0.218.0
+  "@opentelemetry/sdk-trace-base": ^2.7.1
+  "@opentelemetry/semantic-conventions": ^1.41.1
+  "@playwright/test": ^1.60.0
+  "@commitlint/cli": ^21.0.1
+  "@commitlint/config-conventional": ^21.0.1
+  "@types/node": ^25.9.1
+  "@trpc/client": ^11.17.0
+  "@trpc/server": ^11.17.0
+  astro: ^6.3.7
+  better-auth: ^1.6.11
+  dotenv: ^17.4.2
+  drizzle-kit: ^0.31.10
+  drizzle-orm: ^0.45.2
+  eslint: ^10.4.0
+  hono: ^4.12.22
+  husky: ^9.1.7
+  pino: ^10.3.1
+  postgres: ^3.4.9
+  prettier: ^3.8.3
+  turbo: ^2.9.14
+  tsx: ^4.22.3
+  tsup: ^8.5.1
+  typescript: ^6.0.3
+  typescript-eslint: ^8.59.4
+  vitest: ^4.1.7
+  wait-on: ^9.0.10
+  zod: ^4.4.3

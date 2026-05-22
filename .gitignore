@@ -1,0 +1,14 @@
+.DS_Store
+!.turbo/
+.turbo/*
+!.turbo/config.json
+.astro
+*.turbo
+coverage
+dist
+node_modules
+playwright-report
+test-results
+.env
+.env.*
+!.env.example

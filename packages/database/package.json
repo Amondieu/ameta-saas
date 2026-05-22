@@ -1,0 +1,50 @@
+{
+  "name": "@repo/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./schema": {
+      "types": "./src/schema/index.ts",
+      "default": "./dist/src/schema/index.js"
+    }
+  },
+  "types": "./src/index.ts",
+  "engines": {
+    "node": ">=22.0.0 <23",
+    "pnpm": ">=10.0.0 <11"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "db:down": "docker compose down",
+    "db:up": "docker compose up -d",
+    "generate": "drizzle-kit generate",
+    "lint": "eslint .",
+    "migrate": "tsx migrate.ts",
+    "seed": "tsx seed.ts",
+    "test": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.config.integration.ts",
+    "type-check": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@repo/telemetry": "workspace:*",
+    "dotenv": "catalog:",
+    "drizzle-orm": "catalog:",
+    "postgres": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "@types/node": "catalog:",
+    "drizzle-kit": "catalog:",
+    "eslint": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

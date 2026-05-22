@@ -1,0 +1,35 @@
+{
+  "name": "ameta-repo",
+  "private": true,
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22.0.0 <23",
+    "pnpm": ">=10.0.0 <11"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "db:migrate": "pnpm --filter @repo/database migrate",
+    "db:seed": "pnpm --filter @repo/database seed",
+    "db:up": "pnpm --filter @repo/database db:up",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test:e2e": "turbo run test:e2e",
+    "test:e2e:dev": "pnpm --filter @repo/e2e test:e2e",
+    "test:integration": "turbo run test:integration",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@repo/commitlint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "husky": "catalog:",
+    "prettier": "catalog:",
+    "turbo": "catalog:",
+    "wait-on": "catalog:"
+  }
+}

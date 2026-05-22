@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version-file: .nvmrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint workspace
+        run: pnpm lint
+
+      - name: Type-check workspace
+        run: pnpm type-check
+
+      - name: Test workspace
+        run: pnpm test
+
+      - name: Build workspace
+        run: pnpm build
+
+  integration:
+    needs: validate
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: kernel_test
+          POSTGRES_PASSWORD: kernel
+          POSTGRES_USER: kernel
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://kernel:kernel@localhost:5432/kernel_test
+      TURBO_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version-file: .nvmrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run database migrations
+        run: pnpm db:migrate
+
+      - name: Run integration tests
+        run: pnpm test:integration
+
+  e2e:
+    needs: integration
+    runs-on: ubuntu-latest
+    env:
+      API_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: ci-e2e-secret
+      DATABASE_URL: postgresql://kernel:kernel@localhost:5432/kernel_test
+      PORT: "3000"
+      TURBO_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version-file: .nvmrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace
+        run: pnpm build
+
+      - name: Start API
+        shell: bash
+        run: node apps/api/dist/index.js &
+
+      - name: Wait for API
+        run: pnpm exec wait-on http://localhost:3000/health --timeout 15000
+
+      - name: Install Playwright browser
+        run: pnpm --filter @repo/e2e exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        env:
+          CI: "true"
+        run: pnpm test:e2e

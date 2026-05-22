@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ameta-postgres
+    environment:
+      POSTGRES_DB: ameta
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ameta_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  ameta_postgres_data:
