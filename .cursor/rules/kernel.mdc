@@ -1,0 +1,20 @@
+---
+description: Global kernel invariants for the meta-repo
+alwaysApply: true
+---
+
+# Kernel Invariants
+
+- Read `docs/kernel-contract.md` and `docs/map.md` before making cross-package changes.
+- Do not define Drizzle schema outside `packages/database/src/schema`.
+- `@repo/auth` may depend on `@repo/database`; `@repo/database` must never depend on auth.
+- Prefer adding new HTTP routes to `apps/api` instead of creating new apps unless explicitly requested.
+- Keep `tests/e2e` black-box over HTTP; do not import runtime workspace packages there.
+- Keep `pnpm test` for fast in-process coverage; do not move DB-backed tests into that lane.
+- Keep the API `/health` smoke in the unit lane via `app.request('/health')`.
+- When changing DB tables, update schema files, Drizzle migrations, and database tests together.
+- When changing kernel boundaries, test-lane semantics, or CI behavior, update:
+  - `docs/kernel-contract.md`
+  - `docs/decisions.md`
+  - `docs/map.md`
+  - relevant ADRs

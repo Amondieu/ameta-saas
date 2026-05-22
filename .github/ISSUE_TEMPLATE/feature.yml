@@ -1,0 +1,30 @@
+name: Feature request
+description: Request a new capability for the kernel or one of its apps/packages
+labels:
+  - feature
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem are you trying to solve?
+      placeholder: Describe the user or engineering need.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the change and the area it should affect.
+      placeholder: Explain whether this belongs in the shared kernel or a single app/package.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: Kernel change (affects shared boundaries, CI, or multiple packages)
+        - label: Single app or package change only
+        - label: May require database changes
+        - label: May require docs or ADR updates

@@ -2,6 +2,8 @@
 
 AMeta-Repo is a vendor-neutral Turborepo kernel for starting TypeScript applications without committing to a UI framework, cloud provider, database vendor, or deployment target on day one.
 
+For kernel architecture, package boundaries, and safe-change rules, see `docs/kernel-contract.md`.
+
 ## Included
 
 - `turbo.json` using Turborepo 2.x `tasks`
