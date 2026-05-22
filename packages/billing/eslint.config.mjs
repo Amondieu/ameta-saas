@@ -2,7 +2,7 @@ import repoEslintConfig from "@repo/eslint-config";
 
 export default [
   {
-    ignores: ["tsup.config.ts", "vitest.config.integration.ts", "vitest.config.ts"]
+    ignores: ["vitest.config.ts"]
   },
   ...repoEslintConfig.base
 ];

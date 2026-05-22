@@ -3,6 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./trpc": {
+      "types": "./src/trpc/router.ts",
+      "default": "./src/trpc/router.ts"
+    }
+  },
   "engines": {
     "node": ">=22.0.0 <23",
     "pnpm": ">=10.0.0 <11"
@@ -13,6 +23,7 @@
     "lint": "eslint .",
     "start": "node dist/index.js",
     "test": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.config.integration.ts",
     "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
@@ -21,8 +32,10 @@
     "@repo/auth": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/schema": "workspace:*",
+    "@repo/tenancy": "workspace:*",
     "@repo/telemetry": "workspace:*",
     "@trpc/server": "catalog:",
+    "drizzle-orm": "catalog:",
     "hono": "catalog:",
     "zod": "catalog:"
   },

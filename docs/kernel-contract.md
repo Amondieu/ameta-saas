@@ -4,12 +4,12 @@ For quickstart, setup, and top-level repo context, see `README.md`.
 
 ## Purpose
 
-AMeta-Repo is a reusable TypeScript kernel for API-first projects. It provides workspace tooling, API/docs apps, telemetry, database, auth, test lanes, and CI/security baselines without locking a consuming project into a UI framework, cloud, or deployment target.
+AMeta-SaaS inherits the reusable TypeScript kernel and adds the first product-specific layer: row-level tenancy, a minimal Next.js web shell, and provider-agnostic billing interfaces. Shared workspace tooling, API/docs apps, telemetry, database, auth, test lanes, and CI/security baselines still come from the kernel.
 
-## Non-Goals
+## Still Deferred
 
-- Choosing a product UI framework or design system
 - Choosing a cloud provider, IaC implementation, or deployment platform
+- Choosing a concrete billing provider or checkout implementation
 - Adding runtime packages just to support local agent workflows
 
 ## Included Surface
@@ -18,13 +18,17 @@ AMeta-Repo is a reusable TypeScript kernel for API-first projects. It provides w
 - `@repo/telemetry`: Pino logger and side-effect-free OpenTelemetry bootstrap
 - `@repo/database`: Drizzle schema ownership, migrations, seed scripts, Postgres client
 - `@repo/auth`: Better Auth factory backed by `@repo/database`
+- `@repo/tenancy`: tenant resolution helpers for request context, memberships, and query filters
+- `@repo/billing`: provider-neutral billing interfaces for plans, subscriptions, and usage
 - `@repo/api`: Hono + tRPC composition root, auth routes, request logging, health endpoint
+- `@repo/web`: Next.js App Router shell that talks to `@repo/api` over HTTP
 - `@repo/docs`: Starlight docs app for project documentation
 - `tests/e2e`: Playwright smoke coverage against the running API
 
 ## Deferred Decisions
 
-- UI framework and component system
+- Design system and component system
+- Billing provider implementation
 - Database vendor beyond the local Postgres baseline
 - Cloud provider, deployment target, and IaC details
 - Remote cache provider
@@ -38,7 +42,10 @@ See `docs/DEFERRED.md` for the full deferred contract.
 - `@repo/telemetry`: shared logging and tracing only; do not couple it to app routing or schema code.
 - `@repo/database`: owns all Drizzle schema under `packages/database/src/schema`, migrations, and local DB tooling.
 - `@repo/auth`: may depend on `@repo/database`; `@repo/database` must never depend on auth.
-- `@repo/api`: extend this app for new HTTP routes unless there is a strong reason to create another app.
+- `@repo/tenancy`: keep tenant resolution and membership helpers here instead of re-implementing them in each app.
+- `@repo/billing`: keep it interface-only until a product requirement forces provider selection.
+- `@repo/api`: extend this app for new HTTP routes or procedures unless there is a strong reason to create another app.
+- `@repo/web`: consume the API over HTTP; do not import `@repo/database` or `@repo/auth` directly.
 - `@repo/docs`: docs-only surface; keep it isolated from runtime workspace packages.
 - `tests/e2e`: HTTP black-box tests only; do not import runtime packages directly.
 
@@ -72,9 +79,10 @@ Keep the API `/health` smoke in the unit lane via `app.request('/health')`. Do n
 
 1. Define the table in `packages/database/src/schema`.
 2. Generate a Drizzle migration in `packages/database/drizzle`.
-3. Update any auth or API consumers through package boundaries, not ad hoc schema copies.
-4. Add or update tests in `packages/database`.
-5. Run `pnpm test:integration` when Postgres is available.
+3. Thread tenant identity through `@repo/tenancy` and API context if the table is tenant-scoped.
+4. Update any auth or API consumers through package boundaries, not ad hoc schema copies.
+5. Add or update tests in `packages/database`.
+6. Run `pnpm test:integration` when Postgres is available.
 
 ### Add a Package
 

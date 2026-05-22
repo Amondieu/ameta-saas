@@ -1,8 +1,8 @@
-# AMeta-Repo
+# AMeta-SaaS
 
-AMeta-Repo is a vendor-neutral Turborepo kernel for starting TypeScript applications without committing to a UI framework, cloud provider, database vendor, or deployment target on day one.
+AMeta-SaaS is the first derived product repo built on top of the AMeta kernel. It keeps the shared monorepo, API, docs, telemetry, database, auth, test, and security foundations while adding row-level multi-tenancy, a minimal Next.js App Router shell, and thin billing interfaces for a SaaS baseline.
 
-For kernel architecture, package boundaries, and safe-change rules, see `docs/kernel-contract.md`.
+For architecture, package boundaries, and safe-change rules, see `docs/kernel-contract.md`.
 
 ## Included
 
@@ -13,9 +13,12 @@ For kernel architecture, package boundaries, and safe-change rules, see `docs/ke
 - A proof package at `packages/schema` using Zod v4
 - `apps/api` with Hono, the Node adapter, and a thin tRPC v11 surface
 - `apps/docs` with Astro Starlight and the kernel contract docs
+- `apps/web` with a minimal Next.js App Router shell for workspace bootstrap, tenant switching, and settings
 - `packages/telemetry` with Pino logging and side-effect-free OpenTelemetry bootstrap helpers
 - `packages/database` with Drizzle, `postgres.js`, migrations, seed scripts, and local Docker Compose
 - `packages/auth` with Better Auth wired through the shared database schema
+- `packages/tenancy` with helper functions for tenant resolution, membership lookup, and tenant-scoped query filters
+- `packages/billing` with provider-agnostic SaaS billing interfaces
 - Split test lanes for unit (`pnpm test`), database-backed integration (`pnpm test:integration`), and Playwright E2E (`pnpm test:e2e`)
 - `tests/e2e` as a standalone Playwright workspace package for HTTP smoke coverage
 - Husky hooks plus Commitlint for local enforcement
@@ -24,12 +27,13 @@ For kernel architecture, package boundaries, and safe-change rules, see `docs/ke
 
 ## Deferred
 
-- UI framework and component system
+- Design system and component library
+- Billing provider selection and checkout flows
 - Database vendor beyond the local Postgres development baseline
 - Cloud provider and release target
 - Deployment implementation and IaC modules
 - Remote cache provider
-- Background jobs, queueing, search, billing, and email provider choices
+- Background jobs, queueing, search, and email provider choices
 - OAuth provider mix and long-term session scaling strategy
 
 See `docs/DEFERRED.md` for the full deferred-decision contract.
@@ -58,14 +62,15 @@ pnpm build
 
 ## Environment Files
 
-Environment templates live in three places:
+Environment templates live in four places:
 
 - `.env.example`
 - `packages/database/.env.example`
 - `packages/auth/.env.example`
+- `apps/web/.env.example`
 
-The shared required variables are `DATABASE_URL` and `BETTER_AUTH_SECRET`. `BETTER_AUTH_BASE_URL` is expected for auth flows, and `OTEL_EXPORTER_OTLP_ENDPOINT` is optional for local development.
+The shared required variables are `DATABASE_URL` and `BETTER_AUTH_SECRET`. `BETTER_AUTH_BASE_URL` is expected for auth flows, `API_URL` points the Next.js shell at the API server, and `OTEL_EXPORTER_OTLP_ENDPOINT` is optional for local development.
 
 ## Current Scope
 
-This repository now implements the reusable kernel through Phases 1-4: workspace scaffolding, shared tooling, API/docs applications, telemetry, database, auth, split test lanes, request logging, and the GitHub-native security baseline. Project-specific product choices remain deferred so consuming repos can fork this kernel without inheriting a premature UI, cloud, or deployment decision.
+This repository now implements the reusable kernel plus the first SaaS-specific layer: workspace scaffolding, shared tooling, API/docs applications, telemetry, database, auth, row-level tenancy, a minimal Next.js App Router shell, a thin billing contract, split test lanes, request logging, and the GitHub-native security baseline. Infrastructure and provider decisions remain deferred until the product needs them.

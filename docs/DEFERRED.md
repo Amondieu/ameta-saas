@@ -1,14 +1,13 @@
 # Deferred Decisions
 
-The kernel intentionally leaves these choices open so consuming projects can commit to them later without rewriting the workspace foundation.
+AMeta-SaaS now commits to Next.js for the product shell and row-level tenancy for workspace isolation. The decisions below remain intentionally open until the product needs them.
 
 ## Product Stack
 
-- UI framework
 - Design system and component library
 - Background jobs and queueing
 - Search
-- Billing
+- Billing provider and checkout implementation
 
 ## Infrastructure
 

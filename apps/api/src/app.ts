@@ -1,5 +1,9 @@
-import { getAuth } from "@repo/auth";
+import { getAuth, getSessionFromHeaders } from "@repo/auth";
+import { db, tenantMembership } from "@repo/database";
+import { getMembershipFromContext, getTenantFromRequest } from "@repo/tenancy";
+import { createLogger } from "@repo/telemetry";
 import { trpcServer } from "@hono/trpc-server";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 
 import { healthHandler } from "./routes/health.js";
@@ -21,8 +25,44 @@ app.use(
   "/trpc/*",
   trpcServer({
     router: appRouter,
-    createContext: (_opts, c): AppContext => ({
-      requestId: c.req.header("x-request-id") ?? null
-    })
+    createContext: async (_opts, c): Promise<AppContext> => {
+      const requestId = c.req.header("x-request-id") ?? null;
+      const session = await getSessionFromHeaders(c.req.raw.headers);
+      const userId = session?.user.id ?? null;
+      const currentTenantId =
+        (session?.user as { currentTenantId?: string | null } | undefined)?.currentTenantId ?? null;
+      const membershipRows = userId
+        ? await db
+            .select({
+              role: tenantMembership.role,
+              tenantId: tenantMembership.tenantId
+            })
+            .from(tenantMembership)
+            .where(eq(tenantMembership.userId, userId))
+        : [];
+      const tenantId = getTenantFromRequest({
+        currentTenantId,
+        headers: c.req.raw.headers
+      });
+      const currentMembership = getMembershipFromContext({
+        memberships: membershipRows,
+        tenantId
+      });
+      const logger = createLogger("api").child({
+        requestId,
+        tenantId: currentMembership?.tenantId ?? tenantId ?? undefined,
+        userId: userId ?? undefined
+      });
+
+      return {
+        currentMembership,
+        logger,
+        memberships: membershipRows,
+        requestId,
+        session,
+        tenantId,
+        userId
+      };
+    }
   })
 );

@@ -43,4 +43,14 @@ export function createAuth() {
 }
 
 export const getAuth = () => createAuth();
-export type { AuthInstance } from "./types.js";
+
+export async function getSessionFromHeaders(headers: Headers) {
+  return getAuth().api.getSession({
+    headers,
+    query: {
+      disableCookieCache: true
+    }
+  });
+}
+
+export type { AuthInstance, AuthSession } from "./types.js";

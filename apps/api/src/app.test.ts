@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { createLogger } from "@repo/telemetry";
+
 import { app } from "./app.js";
 import { appRouter } from "./trpc/router.js";
 
@@ -22,7 +24,13 @@ describe("api app", () => {
 
   it("executes the hello procedure through the router", async () => {
     const caller = appRouter.createCaller({
-      requestId: "req-123"
+      currentMembership: null,
+      logger: createLogger("api-test"),
+      memberships: [],
+      requestId: "req-123",
+      session: null,
+      tenantId: null,
+      userId: null
     });
 
     const result = await caller.hello({ name: "AMeta" });
