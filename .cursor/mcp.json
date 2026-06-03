@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "sigmap": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@agentrpc/sigmap"
+      ],
+      "description": "Sigmap MCP — 97% Context-Reduktion, 21 Sprachen, zero dependencies. Optimiert Prompts und Kontexte für maximale Token-Effizienz."
+    },
+    "codebase-memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@anthropic/codebase-memory-mcp"
+      ],
+      "description": "Codebase-Memory-MCP — persistenter Knowledge Graph für Cross-Session-Kontext (99% Reduktion durch Caching)."
+    }
+  }
+}

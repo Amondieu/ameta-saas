@@ -2,6 +2,14 @@
 !.turbo/
 .turbo/*
 !.turbo/config.json
+
+# Repomix output
+repomix-output.xml
+repomix-src.xml
+
+# RTK cache
+.rtk/
+
 .astro
 .next
 *.turbo

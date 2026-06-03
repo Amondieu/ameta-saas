@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "check:boundaries": "turbo run check:boundaries",
     "db:migrate": "pnpm --filter @repo/database migrate",
     "db:seed": "pnpm --filter @repo/database seed",
     "db:up": "pnpm --filter @repo/database db:up",
@@ -20,8 +21,11 @@
     "test": "turbo run test",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "repomix": "npx -y repomix --compress --style xml --output repomix-output.xml --ignore \"node_modules,dist,.git,*.log,coverage,.turbo,.next,playwright-report\"",
+    "repomix:src": "npx -y repomix --compress --style xml --include \"apps/**,packages/**,docs/**,tests/**,tooling/**\" --output repomix-src.xml"
   },
+
   "devDependencies": {
     "@repo/commitlint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",

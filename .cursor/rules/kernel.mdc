@@ -6,6 +6,7 @@ alwaysApply: true
 # Kernel Invariants
 
 - Read `docs/kernel-contract.md` and `docs/map.md` before making cross-package changes.
+- Read the latest relevant files in `docs/sessions/` before major cross-package changes when they exist.
 - Do not define Drizzle schema outside `packages/database/src/schema`.
 - `@repo/auth` may depend on `@repo/database`; `@repo/database` must never depend on auth.
 - Prefer adding new HTTP routes to `apps/api` instead of creating new apps unless explicitly requested.
@@ -18,3 +19,14 @@ alwaysApply: true
   - `docs/decisions.md`
   - `docs/map.md`
   - relevant ADRs
+
+## Optimierungs-Invarianten
+
+- **Repomix** (`pnpm repomix`) bei Cross-Package-Änderungen nutzen; Output in `repomix-output.xml`.
+- **Lean CTX**: `bd prime` läuft via `.claude/settings.json` als PreCompact- und SessionStart-Hook
+- **Sigmap MCP**: `.cursor/mcp.json` + `.vscode/mcp.json` konfigurieren `npx @agentrpc/sigmap` (~97% Reduktion)
+- **Codebase-Memory-MCP**: `.cursor/mcp.json` konfiguriert `npx @anthropic/codebase-memory-mcp` (~99% gecached)
+- **RTK**: `.rtk/` Cache-Verzeichnis für API-Proxy-Optimierung; in `.gitignore` aufgenommen
+- **Optimization Agents** in `.claude/agents/optimization/` verwalten Topologie und Performance-Metriken
+
+

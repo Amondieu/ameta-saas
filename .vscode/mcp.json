@@ -1,0 +1,20 @@
+{
+    "servers": {
+        "sigmap": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@agentrpc/sigmap"
+            ]
+        },
+        "codebase-memory": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@anthropic/codebase-memory-mcp"
+            ]
+        }
+    }
+}

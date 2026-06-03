@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "bd prime (Lean CTX)",
+            "type": "shell",
+            "command": "bd prime",
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Refresh beads workflow context — 0 Token, < 500ms"
+        },
+        {
+            "label": "repomix (Codebase komprimieren)",
+            "type": "shell",
+            "command": "pnpm repomix",
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Repomix --compress: gesamtes Repo in XML (~70% Reduktion)"
+        },
+        {
+            "label": "repomix:src (Source komprimieren)",
+            "type": "shell",
+            "command": "pnpm repomix:src",
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Repomix --compress: nur apps/packages/docs/tests/tooling (~70% Reduktion)"
+        }
+    ]
+}
